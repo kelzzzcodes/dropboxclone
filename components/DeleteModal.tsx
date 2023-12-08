@@ -16,6 +16,7 @@ import { useUser } from "@clerk/nextjs";
 import { deleteObject, ref as sRef } from "firebase/storage";
 import { db, storage } from "@/firebase";
 import { deleteDoc, doc } from "firebase/firestore";
+import toast from "react-hot-toast";
 
 const DeleteModal = () => {
   const { user } = useUser();
@@ -29,26 +30,32 @@ const DeleteModal = () => {
 
   async function deleteFile() {
     if (!user || !fileId) return;
+    const toastId = toast.loading('Deleting file...');
 
     // the pat to the file we want to delete. this indicates the location of the file we want to delete
     const fileRef = sRef(storage, `users/${user.id}/files/${fileId}`);
     const docRef = doc(db, "users", user.id, "files", fileId);
-    // const docRef = db.doc("users/user.id/files/fileId");
 
     try {
       deleteObject(fileRef)
         .then(async () => {
-          deleteDoc(doc(db, "users", user.id, "files", fileId)).then(() => {
-            console.log("Delete!");
+          deleteDoc(docRef).then(() => {
+            toast.success('Deleted Successfully',{
+              id: toastId,
+            });
           });
         })
         .finally(() => {
           setIsDeleteModalOpen(false);
         });
     } catch (error) {
-      console.log(error);
+
+      setIsDeleteModalOpen(false);
+
+      toast.error('Error deleting document',{
+            id: toastId
+          })
     }
-    setIsDeleteModalOpen(false);
   }
 
   return (
@@ -81,7 +88,7 @@ const DeleteModal = () => {
           <Button
             type="submit"
             size="sm"
-            variant={'destructive'}
+            variant={"destructive"}
             className="px-3 flex-1"
             onClick={() => deleteFile()}
           >
