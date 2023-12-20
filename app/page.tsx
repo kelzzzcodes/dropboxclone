@@ -36,13 +36,13 @@ export default function Home() {
           </video>
         </div>
       </div>
-      <p className="text-center font-bold text-xl pt-5">Disclaimer</p>
+      {/* <p className="text-center font-bold text-xl pt-5">Disclaimer</p>
       <p>
-        This video is made for information and educational purposes only. We do
+        This vide is made for information and educational purposes only. We do
         not own or affiliate with Dropbox or/and any of it's subsidiaries in any
         form. Copyright Disclaimer under section 107 of the Copyright Act 1976,
         allowance is made for "fair use" of this video for education purposes
-      </p>
+      </p> */}
     </main>
   );
 }
